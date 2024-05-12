@@ -1,7 +1,10 @@
 package hackbangalore.freelancer.ai.service;
 
+import hackbangalore.freelancer.ai.entity.JobUser;
+import hackbangalore.freelancer.ai.entity.Jobs;
 import hackbangalore.freelancer.ai.entity.Users;
 import hackbangalore.freelancer.ai.exception.ResourceNotFoundException;
+import hackbangalore.freelancer.ai.jpa.JobUserRepository;
 import hackbangalore.freelancer.ai.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JobUserRepository jobUserRepository;
 
     // Create
     @Transactional
@@ -50,6 +57,18 @@ public class UserService {
     // Delete
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    // Get list of jobs applied by a user
+    public List<Jobs> getAppliedJobsByUser(Long userId) {
+        List<JobUser> jobUserList = jobUserRepository.findByUserId(userId);
+        return jobUserList.stream().map(JobUser::getJob).collect(Collectors.toList());
+    }
+
+    // Get list of users who have applied for a specific job
+    public List<Users> getUsersAppliedForJob(Long jobId) {
+        List<JobUser> jobUserList = jobUserRepository.findByJobId(jobId);
+        return jobUserList.stream().map(JobUser::getUser).collect(Collectors.toList());
     }
 }
 

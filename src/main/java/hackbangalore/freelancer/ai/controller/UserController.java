@@ -1,5 +1,6 @@
 package hackbangalore.freelancer.ai.controller;
 
+import hackbangalore.freelancer.ai.entity.Jobs;
 import hackbangalore.freelancer.ai.entity.Users;
 import hackbangalore.freelancer.ai.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -42,5 +44,17 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    // Get list of jobs applied by a user
+    @GetMapping("/{userId}/applied-jobs")
+    public List<Jobs> getAppliedJobsByUser(@PathVariable Long userId) {
+        return userService.getAppliedJobsByUser(userId);
+    }
+
+    // Get list of users who have applied for a specific job
+    @GetMapping("/applied-users/{jobId}")
+    public List<Users> getUsersAppliedForJob(@PathVariable Long jobId) {
+        return userService.getUsersAppliedForJob(jobId);
     }
 }
