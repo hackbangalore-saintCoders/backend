@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     Users findByEmail(String email);
 
     // Find list of jobs applied by a user
-    List<Jobs> findJobsAppliedByUserId(Long userId);
+    List<Jobs> findJobsAppliedById(Long userId);
 
     // Find list of users who have applied for a specific job
 //    @Query("SELECT u FROM Users u JOIN u.appliedJobs j WHERE j.id = :jobId")
